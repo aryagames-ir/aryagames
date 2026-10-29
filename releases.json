@@ -1,72 +1,72 @@
 {
-  "version": "0.26.0",
-  "tag": "v0.26.0",
-  "date": "2026-10-26",
+  "version": "0.27.0",
+  "tag": "v0.27.0",
+  "date": "2026-10-29",
   "files": {
     "android-arm64": {
-      "name": "IranianCards-0.26.0-android-arm64.apk",
-      "url": "https://github.com/aryagames-ir/aryagames/releases/download/v0.26.0/IranianCards-0.26.0-android-arm64.apk",
-      "size": 115184908,
-      "sha256": "48e1cd0b35ca1ac8c930986efea26004a9875d7917a4897c9fd1346abaaf449e",
-      "virustotal": "https://www.virustotal.com/gui/file/48e1cd0b35ca1ac8c930986efea26004a9875d7917a4897c9fd1346abaaf449e",
+      "name": "IranianCards-0.27.0-android-arm64.apk",
+      "url": "https://github.com/aryagames-ir/aryagames/releases/download/v0.27.0/IranianCards-0.27.0-android-arm64.apk",
+      "size": 116000786,
+      "sha256": "3366ec2515ee84e194d1d9c57721177474b18a5ecc6390b36fa5c6e677057cc5",
+      "virustotal": "https://www.virustotal.com/gui/file/3366ec2515ee84e194d1d9c57721177474b18a5ecc6390b36fa5c6e677057cc5",
       "scan": {
         "flagged": 0,
-        "engines": 65
+        "engines": 64
       }
     },
     "android-armv7": {
-      "name": "IranianCards-0.26.0-android-armv7.apk",
-      "url": "https://github.com/aryagames-ir/aryagames/releases/download/v0.26.0/IranianCards-0.26.0-android-armv7.apk",
-      "size": 117347002,
-      "sha256": "60905310f55a8588267a9ca7799718e4169fbbf8ac20405fd6a2787a514919e6",
-      "virustotal": "https://www.virustotal.com/gui/file/60905310f55a8588267a9ca7799718e4169fbbf8ac20405fd6a2787a514919e6",
+      "name": "IranianCards-0.27.0-android-armv7.apk",
+      "url": "https://github.com/aryagames-ir/aryagames/releases/download/v0.27.0/IranianCards-0.27.0-android-armv7.apk",
+      "size": 118162916,
+      "sha256": "9659bbb0fbdcf9c5df34cb7913f2e21e9c222bce807dbc2adc2fcc14c525443b",
+      "virustotal": "https://www.virustotal.com/gui/file/9659bbb0fbdcf9c5df34cb7913f2e21e9c222bce807dbc2adc2fcc14c525443b",
+      "scan": {
+        "flagged": 0,
+        "engines": 68
+      }
+    },
+    "linux-x86_64": {
+      "name": "IranianCards-0.27.0-linux-x86_64.zip",
+      "url": "https://github.com/aryagames-ir/aryagames/releases/download/v0.27.0/IranianCards-0.27.0-linux-x86_64.zip",
+      "size": 72956299,
+      "sha256": "d2601ae4c4209dc8c1c108f1258e773a36cf27ff05b548e78f0031fb206e6528",
+      "virustotal": "https://www.virustotal.com/gui/file/d2601ae4c4209dc8c1c108f1258e773a36cf27ff05b548e78f0031fb206e6528",
       "scan": {
         "flagged": 0,
         "engines": 67
       }
     },
-    "linux-x86_64": {
-      "name": "IranianCards-0.26.0-linux-x86_64.zip",
-      "url": "https://github.com/aryagames-ir/aryagames/releases/download/v0.26.0/IranianCards-0.26.0-linux-x86_64.zip",
-      "size": 72145198,
-      "sha256": "fe3694dc2d39ad3ae6a41382474c244366df3836bf0c90fd7584057d18906d79",
-      "virustotal": "https://www.virustotal.com/gui/file/fe3694dc2d39ad3ae6a41382474c244366df3836bf0c90fd7584057d18906d79",
-      "scan": {
-        "flagged": 0,
-        "engines": 66
-      }
-    },
     "macos-arm64": {
-      "name": "IranianCards-0.26.0-macos-arm64.zip",
-      "url": "https://github.com/aryagames-ir/aryagames/releases/download/v0.26.0/IranianCards-0.26.0-macos-arm64.zip",
-      "size": 70525712,
-      "sha256": "18a1708944b9cb48fa9ffe50be97e26f35de8c71e7fafe5e5085344be606d44d",
-      "virustotal": "https://www.virustotal.com/gui/file/18a1708944b9cb48fa9ffe50be97e26f35de8c71e7fafe5e5085344be606d44d",
+      "name": "IranianCards-0.27.0-macos-arm64.zip",
+      "url": "https://github.com/aryagames-ir/aryagames/releases/download/v0.27.0/IranianCards-0.27.0-macos-arm64.zip",
+      "size": 71338276,
+      "sha256": "689b3092439c0be7d7e31b59a512d297dea92071fc31424c82c07ce2f22a1271",
+      "virustotal": "https://www.virustotal.com/gui/file/689b3092439c0be7d7e31b59a512d297dea92071fc31424c82c07ce2f22a1271",
       "scan": {
         "flagged": 0,
-        "engines": 65
+        "engines": 68
       }
     },
     "macos-x86_64": {
-      "name": "IranianCards-0.26.0-macos-x86_64.zip",
-      "url": "https://github.com/aryagames-ir/aryagames/releases/download/v0.26.0/IranianCards-0.26.0-macos-x86_64.zip",
-      "size": 74856658,
-      "sha256": "43e4fd6736bb63f2c0a0aad5b5022274fc38ff57d0c3a2830f09a7252ea06011",
-      "virustotal": "https://www.virustotal.com/gui/file/43e4fd6736bb63f2c0a0aad5b5022274fc38ff57d0c3a2830f09a7252ea06011",
+      "name": "IranianCards-0.27.0-macos-x86_64.zip",
+      "url": "https://github.com/aryagames-ir/aryagames/releases/download/v0.27.0/IranianCards-0.27.0-macos-x86_64.zip",
+      "size": 75669195,
+      "sha256": "491eab952381514fcc12be4b7281c4317f48e55742d417e5ee68526f3b273ab6",
+      "virustotal": "https://www.virustotal.com/gui/file/491eab952381514fcc12be4b7281c4317f48e55742d417e5ee68526f3b273ab6",
       "scan": {
         "flagged": 0,
-        "engines": 59
+        "engines": 67
       }
     },
     "windows": {
-      "name": "IranianCards-0.26.0-windows.zip",
-      "url": "https://github.com/aryagames-ir/aryagames/releases/download/v0.26.0/IranianCards-0.26.0-windows.zip",
-      "size": 81390448,
-      "sha256": "87564a59ea55b5976254c5291afe8ea303f4505c0c0411445730fc1cfdd1b873",
-      "virustotal": "https://www.virustotal.com/gui/file/87564a59ea55b5976254c5291afe8ea303f4505c0c0411445730fc1cfdd1b873",
+      "name": "IranianCards-0.27.0-windows.zip",
+      "url": "https://github.com/aryagames-ir/aryagames/releases/download/v0.27.0/IranianCards-0.27.0-windows.zip",
+      "size": 82201828,
+      "sha256": "aad6dd93ce4338069948490eecbd5d28da57776e3e2fda12b9b874c9cca31f91",
+      "virustotal": "https://www.virustotal.com/gui/file/aad6dd93ce4338069948490eecbd5d28da57776e3e2fda12b9b874c9cca31f91",
       "scan": {
         "flagged": 0,
-        "engines": 66
+        "engines": 68
       }
     }
   }
