@@ -21,7 +21,9 @@ Secrets here: `VIRUSTOTAL_API_KEY` (without it the scan is skipped with a warnin
 - `site/`: the pages (`index.html`, `changelog.html`) and `assets/`. `{{placeholders}}` are filled by the build.
 
 ## In-app update check
-The build also writes `https://aryagames.ir/latest_version.json` (and the same text at `/latest_version`, for a browser), from `releases.json` and `changelog.md`: `{"version": "0.13.0", "date": "2026-10-01", "url": "https://aryagames.ir", "releases": [{"version": "0.13.0", "date": "2026-10-01"}, …]}`. `releases` lists every changelog entry up to that release, newest first. On 70% of app opens the app fetches it; when the player's build is older and the first release that build lacks is at least a week old, it tells them a new version is out and offers a button to `url`, so releasing often doesn't keep postponing the prompt (older apps count from `date` instead). It never downloads anything itself; on Android the prompt also offers Bazaar and Myket. Changelog dates therefore matter: keep each heading's date the real public release date. Keep the keys stable.
+The build writes `https://aryagames.ir/versions.json` from `changelog.md`: `{"url": "https://aryagames.ir", "releases": [{"version": "0.13.0", "date": "2026-10-01"}, …]}`, every entry up to the version in `releases.json`, newest first. On 70% of app opens the app fetches it; when the player's build is older and the first release that build lacks is at least a week old, it tells them a new version is out and offers a button to `url` (on Android also Bazaar and Myket), so releasing often doesn't keep postponing the prompt. It never downloads anything itself. Changelog dates therefore matter: keep each heading's date the real public release date.
+
+Builds from before `versions.json` read `https://aryagames.ir/latest_version.json` instead (the same text at `/latest_version`, for a browser), from `releases.json`: `{"version": "0.13.0", "date": "2026-10-01", "url": "https://aryagames.ir"}`, prompting once the latest release is a week old. It stays for them; never change its shape.
 
 ## Build and preview
 ```sh

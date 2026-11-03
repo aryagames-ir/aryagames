@@ -236,16 +236,18 @@ def main() -> None:
     for page in SITE.glob("*.html"):
         (OUT / page.name).write_text(fill(page.read_text(encoding="utf-8"), values), encoding="utf-8")
     shutil.copy(ROOT / "releases.json", OUT / "releases.json")
-    # The app's update check (Menu/UpdateCheck.cs and UpdateFeed.cs in the app repo) reads latest_version.json: when
-    # the player's build is older and the first release it lacks is at least a week old, it points them at the url.
-    # "releases" (every changelog entry up to this release, newest first) lets it count from that first missing
-    # release, so frequent releases don't keep restarting the wait; apps from before it read only version and date.
-    # Keep the keys stable. Pages types files by extension, so the .json is served as JSON; /latest_version (a
-    # folder's index.html, same text) is for people, since an extensionless file would be downloaded instead of shown.
+    # The app's update check (Menu/UpdateCheck.cs and UpdateFeed.cs in the app repo) reads versions.json: every
+    # changelog entry up to this release, newest first. When the player's build is older and the first release it
+    # lacks is at least a week old, it points them at the url, so frequent releases don't keep restarting the wait.
+    # Builds from before versions.json read latest_version.json instead; keep both files' keys stable and never
+    # change latest_version.json's shape. Pages types files by extension, so the .json files are served as JSON;
+    # /latest_version (a folder's index.html, same text) is for people, since an extensionless file would be
+    # downloaded instead of shown.
+    latest = json.dumps({"version": release["version"], "date": release["date"], "url": SITE_URL}) + "\n"
     released = [{"version": e["version"], "date": e["date"]} for e in entries
                 if version_key(e["version"]) <= version_key(release["version"])]
-    latest = json.dumps({"version": release["version"], "date": release["date"], "url": SITE_URL,
-                         "releases": released}) + "\n"
+    (OUT / "versions.json").write_text(
+        json.dumps({"url": SITE_URL, "releases": released}, indent=1) + "\n", encoding="utf-8")
     (OUT / "latest_version.json").write_text(latest, encoding="utf-8")
     (OUT / "latest_version").mkdir()
     (OUT / "latest_version" / "index.html").write_text(latest, encoding="utf-8")
