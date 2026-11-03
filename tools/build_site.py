@@ -114,6 +114,12 @@ def parse_changelog(text: str) -> list[dict]:
     return entries
 
 
+def version_key(version: str) -> tuple[int, ...]:
+    """The leading numbers of a version, "0.30.1" -> (0, 30, 1), for ordering."""
+    m = re.match(r"\d+(?:\.\d+)*", version)
+    return tuple(int(n) for n in m[0].split(".")) if m else ()
+
+
 def render_items(items: list[str]) -> str:
     return "".join(f"<li>{html.escape(i)}</li>" for i in items)
 
@@ -230,11 +236,16 @@ def main() -> None:
     for page in SITE.glob("*.html"):
         (OUT / page.name).write_text(fill(page.read_text(encoding="utf-8"), values), encoding="utf-8")
     shutil.copy(ROOT / "releases.json", OUT / "releases.json")
-    # The app's update check (Menu/UpdateCheck.cs in the app repo) reads latest_version.json once a day: when the
-    # player's build is older and this release is at least a week old, it points them at the url. Keep the keys stable.
-    # Pages types files by extension, so the .json is served as JSON; /latest_version (a folder's index.html, same
-    # text) is for people, since an extensionless file would be downloaded instead of shown.
-    latest = json.dumps({"version": release["version"], "date": release["date"], "url": SITE_URL}) + "\n"
+    # The app's update check (Menu/UpdateCheck.cs and UpdateFeed.cs in the app repo) reads latest_version.json: when
+    # the player's build is older and the first release it lacks is at least a week old, it points them at the url.
+    # "releases" (every changelog entry up to this release, newest first) lets it count from that first missing
+    # release, so frequent releases don't keep restarting the wait; apps from before it read only version and date.
+    # Keep the keys stable. Pages types files by extension, so the .json is served as JSON; /latest_version (a
+    # folder's index.html, same text) is for people, since an extensionless file would be downloaded instead of shown.
+    released = [{"version": e["version"], "date": e["date"]} for e in entries
+                if version_key(e["version"]) <= version_key(release["version"])]
+    latest = json.dumps({"version": release["version"], "date": release["date"], "url": SITE_URL,
+                         "releases": released}) + "\n"
     (OUT / "latest_version.json").write_text(latest, encoding="utf-8")
     (OUT / "latest_version").mkdir()
     (OUT / "latest_version" / "index.html").write_text(latest, encoding="utf-8")
