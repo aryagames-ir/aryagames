@@ -4,6 +4,9 @@ tools/build_site.py turns this into changelog.html (anchor #vX.Y.Z) and shows th
 Write for players: what changed at the table, not how it was built.
 -->
 
+## 0.31.1 | 2026-11-04
+- حریف‌ها و یار شما در حکم و قفون خیلی خیلی قوی‌تر و باهوش‌تر بازی می‌کنند.
+
 ## 0.30.1 | 2026-11-01
 - صفحهٔ شروع بازی ساده‌تر شده: سرس، نرس و تک نرس به‌زودی می‌آیند، و در قفون اولین تیمی که به ۱۰۴ برسد برنده است.
 
