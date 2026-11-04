@@ -1,0 +1,21 @@
+#!/bin/sh
+# Refuses a push that carries any commit (or annotated tag) whose author, committer or tagger
+# email is not in .githooks/allowed-identities. Catches amends, rebases and cherry-picks too.
+allowed="$(git rev-parse --show-toplevel)/.githooks/allowed-identities"
+zero=0000000000000000000000000000000000000000
+remote="$1"
+bad=0
+while read -r lref lsha rref rsha; do
+  [ "$lsha" = "$zero" ] && continue  # branch deletion
+  if [ "$rsha" = "$zero" ]; then range="$lsha --not --remotes=$remote"; else range="$rsha..$lsha"; fi
+  out=$(git log --format='%H %ae %ce' $range | while read -r h ae ce; do
+    for e in "$ae" "$ce"; do grep -qxF "$e" "$allowed" || echo "  $(echo $h | cut -c1-7) <$e>"; done
+  done)
+  if [ "$(git cat-file -t "$lsha")" = tag ]; then
+    te=$(git cat-file tag "$lsha" | sed -n 's/^tagger .*<\(.*\)>.*/\1/p')
+    grep -qxF "$te" "$allowed" || out="$out
+  tag $lref <$te>"
+  fi
+  if [ -n "$out" ]; then printf "pre-push: %s has disallowed identities:\n%s\n" "$lref" "$out" >&2; bad=1; fi
+done
+[ $bad -eq 0 ] || { echo "Rewrite them (e.g. git rebase -r <base> --exec 'git commit --amend --no-edit --reset-author') and push again." >&2; exit 1; }

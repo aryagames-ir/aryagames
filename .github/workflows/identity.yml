@@ -1,0 +1,31 @@
+# Fails when a pushed commit's author or committer email is not in .githooks/allowed-identities,
+# so a personal email can't slip in even if the local hooks were skipped (--no-verify, fresh clone).
+name: Identity check
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - name: Check commit identities
+        env:
+          BEFORE: ${{ github.event.before }}
+          BASE: ${{ github.event.pull_request.base.sha }}
+          HEAD: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          base="${BASE:-$BEFORE}"
+          if [ -z "$base" ] || ! git cat-file -e "$base^{commit}" 2>/dev/null; then range="$HEAD"; else range="$base..$HEAD"; fi
+          bad=$(git log --format='%h %ae %ce' $range | while read -r h ae ce; do
+            for e in "$ae" "$ce"; do grep -qxF "$e" .githooks/allowed-identities || echo "$h <$e>"; done
+          done)
+          if [ -n "$bad" ]; then echo "::error::Disallowed commit identities:"; echo "$bad"; exit 1; fi
+          echo "All commit identities allowed."

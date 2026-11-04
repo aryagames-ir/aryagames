@@ -33,3 +33,11 @@ python3 -m http.server -d _site 8000   # http://localhost:8000
 
 ## Custom domain
 The site is served at https://aryagames.ir: `site/CNAME` holds the domain, and it is set in Settings → Pages. The DNS is on Cloudflare: A records to GitHub's Pages IPs and `www` as a CNAME to `aryagames-ir.github.io`, all DNS only (grey cloud).
+
+## Commit identity
+Only the emails in `.githooks/allowed-identities` (`hello@aryagames.ir` and the Actions bot) may author or commit here, so no personal email leaks into the public history. After cloning, run once:
+```sh
+git config user.name AryaGames && git config user.email hello@aryagames.ir
+git config core.hooksPath .githooks
+```
+`pre-commit` refuses a commit made under any other email; `pre-push` refuses a push carrying one (amends, rebases, cherry-picks, tags). The `Identity check` workflow fails on GitHub for any pushed commit that got past the hooks.

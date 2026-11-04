@@ -1,0 +1,3 @@
+# Emails allowed as commit author/committer (and tagger) in this repo. One per line.
+hello@aryagames.ir
+41898282+github-actions[bot]@users.noreply.github.com

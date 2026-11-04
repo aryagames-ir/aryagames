@@ -1,0 +1,12 @@
+#!/bin/sh
+# Refuses a commit whose author or committer email is not in .githooks/allowed-identities.
+# Enable once per clone: git config core.hooksPath .githooks
+allowed="$(git rev-parse --show-toplevel)/.githooks/allowed-identities"
+for v in GIT_AUTHOR_IDENT GIT_COMMITTER_IDENT; do
+  email=$(git var "$v" | sed -n 's/.*<\(.*\)>.*/\1/p')
+  if ! grep -qxF "$email" "$allowed"; then
+    echo "pre-commit: $v email <$email> is not allowed in this repo." >&2
+    echo "  Fix: git config user.name AryaGames && git config user.email hello@aryagames.ir" >&2
+    exit 1
+  fi
+done
