@@ -1,0 +1,5 @@
+{
+  "buildCommand": "python3 tools/build_site.py",
+  "outputDirectory": "_site",
+  "cleanUrls": true
+}
