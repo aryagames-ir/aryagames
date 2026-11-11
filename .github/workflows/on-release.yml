@@ -1,6 +1,8 @@
 # After every release here: scan its builds on VirusTotal and wait for the verdicts (tools/virustotal.sh), point
 # releases.json at it (tools/update_releases_json.sh), and only then redeploy the site, every run, so the download
 # buttons follow. This is the only deploy a release makes; nothing deploys the site ahead of the scan.
+# main accepts pushes only from the org app aryagames-ir-bot (ruleset "main: app-only"), so the releases.json
+# commit is pushed with that app's token (secret ARYAGAMES_BOT_PRIVATE_KEY, app id 5522051). GITHUB_TOKEN cannot.
 # A newly published release also goes to Myket and Cafe Bazaar (myket.yml, bazaar.yml) once its scan is done; a rescan
 # or a run by hand doesn't, as the stores would get the same version again. Send an older tag with those workflows.
 # - Runs when a release is published, and on a "rescan" repository_dispatch, which the app repo's tools/publish_public.sh
@@ -47,21 +49,34 @@ jobs:
     needs: scan
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
+    outputs:
+      pushed: ${{ steps.commit.outputs.pushed }}
     steps:
+      # The ruleset on main bypasses only this app. Checkout stores the token on origin, so the push below is allowed.
+      - uses: actions/create-github-app-token@v2
+        id: bot
+        with:
+          app-id: "5522051"
+          private-key: ${{ secrets.ARYAGAMES_BOT_PRIVATE_KEY }}
+          owner: aryagames-ir
+          repositories: aryagames
       - uses: actions/checkout@v5
         with:
           ref: main
+          token: ${{ steps.bot.outputs.token }}
       - name: Point releases.json at this release
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ steps.bot.outputs.token }}
           TAG: ${{ inputs.tag || github.event.release.tag_name || github.event.client_payload.tag }}
         run: tools/update_releases_json.sh "$TAG"
       - name: Commit releases.json
+        id: commit
         env:
           TAG: ${{ inputs.tag || github.event.release.tag_name || github.event.client_payload.tag }}
         run: |
           if git diff --quiet releases.json; then
+            echo "pushed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git config user.name "github-actions[bot]"
@@ -69,14 +84,15 @@ jobs:
           git commit -am "release: $TAG"
           git pull --rebase origin main
           git push origin HEAD:main
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
 
-  # A push made with GITHUB_TOKEN doesn't start pages.yml on its own, so start it from here, also when releases.json
-  # didn't change (a rescan). Dispatched rather than called: a called pages.yml runs as the release's tag commit, and
-  # deploy-pages names the deployment after that commit. When the push of that same commit had already deployed the
-  # site, Pages took the new deployment for the old one and kept serving the site from before releases.json moved.
-  # A dispatch on main runs as main's tip, the releases.json commit just pushed.
+  # An app-token push starts pages.yml on its own. Dispatch only when nothing was pushed (a rescan that left
+  # releases.json unchanged): GITHUB_TOKEN cannot push, and a called pages.yml would deploy under the release tag.
+  # When a push of that same commit had already deployed the site, Pages treated the second deployment as the first
+  # and kept serving the site from before releases.json moved. A dispatch on main runs as main's tip.
   deploy:
     needs: sync
+    if: needs.sync.outputs.pushed != 'true'
     runs-on: ubuntu-latest
     permissions:
       actions: write
